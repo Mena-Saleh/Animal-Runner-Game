@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-
     // Adds one collected coin
     public void AddCoin()
     {

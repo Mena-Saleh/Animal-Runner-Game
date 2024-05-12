@@ -5,8 +5,8 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    RoadSpawner roadSpawner;
-    ObjectSpawner objectSpawner;
+    private RoadSpawner roadSpawner;
+    private ObjectSpawner objectSpawner;
     void Start()
     {
         roadSpawner = GetComponent<RoadSpawner>();

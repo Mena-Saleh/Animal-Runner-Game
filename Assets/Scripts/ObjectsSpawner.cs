@@ -66,21 +66,24 @@ public class ObjectSpawner : MonoBehaviour
         }
 
 
-        // Deletes obstacles/enemies out of sight
-        void DeleteCreatedObjectsBehindPlayer()
-        {
-            // Find all objects with the "Instantiatable" tag
-            GameObject[] instantiatablesArrays = GameObject.FindGameObjectsWithTag("Instantiatable");
 
-            // Iterate through each item
-            foreach (GameObject item in instantiatablesArrays)
+    }
+
+
+    // Deletes obstacles/enemies out of sight
+    void DeleteCreatedObjectsBehindPlayer()
+    {
+        // Find all objects with the "Instantiatable" tag
+        GameObject[] instantiatablesArrays = GameObject.FindGameObjectsWithTag("Instantiatable");
+
+        // Iterate through each item
+        foreach (GameObject item in instantiatablesArrays)
+        {
+            // Delete items out of player range
+            if (item.transform.position.z - player.position.z < -8f)
             {
-                // Delete items out of player range
-                if (item.transform.position.z - player.position.z < -8f)
-                {
-                    // Destroy the item
-                    Destroy(item);
-                }
+                // Destroy the item
+                Destroy(item);
             }
         }
     }

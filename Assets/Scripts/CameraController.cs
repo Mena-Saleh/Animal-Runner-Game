@@ -23,6 +23,6 @@ public class CameraController : MonoBehaviour
     // Late update so that the camera is updated after the player has moved
     void LateUpdate()
     {
-        transform.position = new Vector3(player.position.x, targetY, player.position.z + zOffset);
+        transform.position = new Vector3(player.position.x, player.position.y + yOffset, player.position.z + zOffset);
     }
 }

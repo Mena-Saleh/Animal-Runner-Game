@@ -8,7 +8,9 @@ public class EnemyBasicAI : MonoBehaviour
     private Rigidbody enemyRb;
     private Transform player;
     private float reactDistance = 20f;
-    private float speedIncreaseFactor = 0.005f; // Factor to increase according to distance covered by player in Z
+    private float speedIncreaseFactor = 0.01f; // Factor to increase according to distance covered by player in Z
+
+    bool hasCollided = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +22,9 @@ public class EnemyBasicAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Don't move towards player if the player is dead (enemy successfully collided with player)
+        if (hasCollided) return;
+
         // Distance from player
         float distance = Vector3.Distance(player.position, transform.position);
 
@@ -48,6 +53,15 @@ public class EnemyBasicAI : MonoBehaviour
         if (transform.position.z - player.position.z < -3f)
         {
             Destroy(gameObject);
+        }
+    }
+
+    // Stop moving on collision
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            hasCollided = true;
         }
     }
 }

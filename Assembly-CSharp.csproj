@@ -84,6 +84,7 @@
     <Compile Include="Assets\_Import\SUPER Character Controller\Demo Assets\Scripts\SkySweptFortress\MovingPlatform.cs" />
     <Compile Include="Assets\_Import\Ultimate 10 Plus Shaders\Scripts\U10PS_SnowOverTime.cs" />
     <Compile Include="Assets\Scripts\MenuController.cs" />
+    <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
     <Compile Include="Assets\_Import\Ultimate 10 Plus Shaders\Scripts\U10PS_DissolveOverTime.cs" />
     <Compile Include="Assets\Scripts\RoadSpawner.cs" />

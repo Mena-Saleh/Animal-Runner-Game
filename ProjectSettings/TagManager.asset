@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - Coin
   - Instantiatable
+  - Audio
   layers:
   - Default
   - TransparentFX

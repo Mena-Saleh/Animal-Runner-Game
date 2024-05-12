@@ -25,6 +25,11 @@ public class CharController : MonoBehaviour
     public GameObject coinParticleSystemPrefab; // To add a coin collection particle animation when hitting a coin
     private GameObject lastTriggeredSpawn = null; // To not trigger same roadspawners twice in a row
     private bool canMove = true; // Variable to control ability to move to be triggered on death
+    private AudioManager audioManager;
+
+    private float runningSoundCooldown = 0.4f; // Minimum time between running sounds (to not spam it on every update)
+    private float lastRunningSoundTime = 0; // When the last running sound was played
+
 
     // Use this for initialization
     void Start()
@@ -32,7 +37,7 @@ public class CharController : MonoBehaviour
         originalXPosition = transform.position.x;
         originalAnimatedPlayerYPosition = animatedPlayer.transform.position.y;
         rigidBody = GetComponent<Rigidbody>();
-
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
@@ -40,17 +45,6 @@ public class CharController : MonoBehaviour
     {
         // Don't update if dead
         if (!canMove) return;
-
-        // Reset player y position because interrupting the running animation can result in undesired elevation
-        // (running animation has a keyframe in the middle with elevated position in y)
-        if (Mathf.Abs(animatedPlayer.transform.position.y - originalAnimatedPlayerYPosition) >= 0.1f && isGrounded)
-        {
-            Debug.Log("fixed");
-            Vector3 position = animatedPlayer.transform.position;
-            position.y = originalAnimatedPlayerYPosition;
-            animatedPlayer.transform.position = position;
-        }
-
 
         // Speed increases progressively to get more difficult (max possible increment is 7 to not get too fast)
         float dynamicSpeed = Mathf.Min(baseMovementSpeed + (transform.position.z * speedIncreaseFactor), baseMovementSpeed + 7);
@@ -68,6 +62,14 @@ public class CharController : MonoBehaviour
         bool isRunning = Mathf.Abs(hMovement) > 0 || Mathf.Abs(vMovement) > 0;
         animator.SetBool("isRunning", isRunning); // Update the animator parameter
 
+
+        // Check if cooldown for playing running sound is over while player is running
+        if (isRunning && Time.time - lastRunningSoundTime >= runningSoundCooldown)
+        {
+            // Play sound effect
+            audioManager.PlaySFX(audioManager.running);
+            lastRunningSoundTime = Time.time; // Update the last time the sound was played
+        }
 
         //Prevent backward movement
         if (vMovement < 0)
@@ -103,6 +105,8 @@ public class CharController : MonoBehaviour
         // Jumping
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
+            // Play sound effect
+            audioManager.PlaySFX(audioManager.jumping);
             isGrounded = false; // The player is no longer on the ground
             rigidBody.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
             animator.SetBool("isJumping", true); // Notify the animator about the jump
@@ -128,6 +132,8 @@ public class CharController : MonoBehaviour
 
         if (collision.gameObject.tag == "Coin")
         {
+            // Play sound effect
+            audioManager.PlaySFX(audioManager.coinCollect);
 
             // Instantiate the particle system at the coin's position
             GameObject particleSystemObject = Instantiate(coinParticleSystemPrefab, collision.transform.position, Quaternion.identity);
@@ -158,11 +164,23 @@ public class CharController : MonoBehaviour
             dirtParticleSystem.Play(); // Turn on dirt particles while on ground
             isGrounded = true; // The player is now on the ground
             animator.SetBool("isJumping", false); // Ensure the jump parameter is reset
+
+            // Reset player y position because interrupting the running animation can result in undesired elevation
+            // (running animation has a keyframe in the middle with elevated position in y)
+            if (Mathf.Abs(animatedPlayer.transform.position.y - originalAnimatedPlayerYPosition) >= 0.1f)
+            {
+                Vector3 position = animatedPlayer.transform.position;
+                position.y = originalAnimatedPlayerYPosition;
+                animatedPlayer.transform.position = position;
+            }
+
         }
 
         // Punish player for hitting obstacles or enemies
         if ((collision.gameObject.tag == "Obstacle" && transform.position.z < collision.transform.position.z) || collision.gameObject.tag == "Instantiatable")
         {
+            // Play sound effect
+            audioManager.PlaySFX(audioManager.collision);
             // Backward force equivelant to mass of object the player collides with, max possible is 50 to prevent incredibly large forces
             float backwardForce = Mathf.Min(collision.rigidbody.mass, 50);
             // Apply the backward force
@@ -185,7 +203,7 @@ public class CharController : MonoBehaviour
                 // Reset this object
                 lastTriggeredSpawn = null;
 
-                // Wait a bit (for the animation to show) then restart level
+                // Wait a bit (for the animation to show) then display menu with options
                 StartCoroutine(DelayMenuLoad(1.0f)); // 1 second delay
             }
         }
