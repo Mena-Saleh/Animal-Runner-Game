@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,12 @@ public class GameManager : MonoBehaviour
 
     public GameObject gameOverMenu;
 
+    public GameData gameData;
+
+    void Awake()
+    {
+        gameData = SaveSystem.Load();
+    }
     void Start()
     {
         player = GameObject.Find("Player").transform;
@@ -35,9 +42,20 @@ public class GameManager : MonoBehaviour
         collectedCoins++;
     }
 
-    // Displays game over menu
+    // Saves game info + shows game over menu
     public void GameOver()
     {
+        // Save collected coins
+        gameData.totalCoins += collectedCoins;
+
+        // Getting distance covered and comparing it to highscore
+        int coveredDistance = Mathf.RoundToInt(player.transform.position.z);
+        gameData.distanceHighscore = Math.Max(gameData.distanceHighscore, coveredDistance);
+
+        // Saving data
+        SaveSystem.Save(gameData);
+
+        // Showing game over menu
         gameOverMenu.SetActive(true);
     }
 }

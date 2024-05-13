@@ -10,7 +10,7 @@ public class ObjectSpawner : MonoBehaviour
     private float firstSpawnZ = 0;
     private int spawnAmount = 3;
     private Transform player;
-
+    private int lastObstacleIndex = -1; // To keep track of last spawned obstacle to not spawn two of the same in a row
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +37,20 @@ public class ObjectSpawner : MonoBehaviour
             if (Random.Range(0f, 1f) <= 0.60f)
             {
                 // Get random obstacle
-                GameObject obstacle = obstacles[Random.Range(0, obstacles.Count)];
-                Instantiate(obstacle, new Vector3(0, -0.2f, firstSpawnZ), obstacle.transform.rotation);
+                int randomObstacleIndex = Random.Range(0, obstacles.Count);
+                GameObject newObstacle;
+                if (randomObstacleIndex == lastObstacleIndex) // If same as last spawned, spawn the one right after for a bit of variety
+                {
+                    int newIndex = (randomObstacleIndex + 1) % obstacles.Count;
+                    newObstacle = obstacles[newIndex];
+                    lastObstacleIndex = newIndex;
+                }
+                else // If different from last spawned, just spawn it
+                {
+                    newObstacle = obstacles[randomObstacleIndex];
+                    lastObstacleIndex = randomObstacleIndex;
+                }
+                Instantiate(newObstacle, new Vector3(0, -0.2f, firstSpawnZ), newObstacle.transform.rotation);
             }
             // If not an obstacle, then spawn an enemy
             else

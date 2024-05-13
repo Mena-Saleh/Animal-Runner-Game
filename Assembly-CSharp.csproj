@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_Import\SUPER Character Controller\Demo Assets\Scripts\OminousOffice\Door.cs" />
+    <Compile Include="Assets\Scripts\GameData.cs" />
     <Compile Include="Assets\_Import\AurynSky\Forest Pack\Scripts\Rotator.cs" />
     <Compile Include="Assets\Scripts\ObjectsSpawner.cs" />
     <Compile Include="Assets\Scripts\EnemyBasicAI.cs" />
@@ -82,12 +83,14 @@
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\_Import\SUPER Character Controller\Demo Assets\Scripts\SkySweptFortress\MovingPlatform.cs" />
+    <Compile Include="Assets\Scripts\MainMenuManager.cs" />
     <Compile Include="Assets\_Import\Ultimate 10 Plus Shaders\Scripts\U10PS_SnowOverTime.cs" />
     <Compile Include="Assets\Scripts\MenuController.cs" />
     <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\CharController.cs" />
     <Compile Include="Assets\_Import\Ultimate 10 Plus Shaders\Scripts\U10PS_DissolveOverTime.cs" />
     <Compile Include="Assets\Scripts\RoadSpawner.cs" />
+    <Compile Include="Assets\Scripts\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
   </ItemGroup>
   <ItemGroup>

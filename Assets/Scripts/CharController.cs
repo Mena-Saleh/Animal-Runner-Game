@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class CharController : MonoBehaviour
 {
     public float baseMovementSpeed = 10f;
-    public float rotationSpeed = 100f;
+    public float rotationSpeed = 15f;
     public float jumpForce = 5f;
     private bool isGrounded; // To check if the player is on the ground
     public float maxHorizontalLimit = 5f; // Maximum distance character can move horizontally
@@ -26,7 +26,6 @@ public class CharController : MonoBehaviour
     private GameObject lastTriggeredSpawn = null; // To not trigger same roadspawners twice in a row
     private bool canMove = true; // Variable to control ability to move to be triggered on death
     private AudioManager audioManager;
-
     private float runningSoundCooldown = 0.4f; // Minimum time between running sounds (to not spam it on every update)
     private float lastRunningSoundTime = 0; // When the last running sound was played
 
@@ -86,20 +85,33 @@ public class CharController : MonoBehaviour
         desiredPosition.x = Mathf.Clamp(desiredPosition.x, originalXPosition - maxHorizontalLimit, originalXPosition + maxHorizontalLimit);
         transform.position = desiredPosition;
 
-        // Calculate target rotation based on movement
-        float targetRotation = 0f;
-        if (Mathf.Abs(hMovement) > 0.1f) // Only rotates when there is at least a little bit of horizontal movement 
+        // Manage rotation when the player moves sideways
+        float targetAngle;
+        if (Mathf.Abs(hMovement) > 0.1f) // There is significant horizontal movement
         {
-            float maxRotation = vMovement > 0 ? 20f : 70f; // If moving forward, then the rotation angle is less
-            targetRotation = maxRotation * Mathf.Sign(hMovement); // Multiplying by the sign to get the proper direction
+            if (Mathf.Abs(vMovement) > 0.1f)
+            {
+                // If there is also vertical movement, set maximum rotation angle to 20 degrees
+                targetAngle = hMovement > 0 ? 20f : -20f;
+            }
+            else
+            {
+                // No vertical movement, set maximum rotation angle to 70 degrees
+                targetAngle = hMovement > 0 ? 70f : -70f;
+            }
+
+            // Calculate the rotation as a Quaternion
+            Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
+
+            // Smoothly rotate towards the target rotation
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            // Reset rotation if there is no horizontal movement
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, rotationSpeed * Time.deltaTime);
         }
 
-        // Calculate smooth rotation
-        float currentYRotation = transform.eulerAngles.y;
-        float rotationStep = Mathf.SmoothStep(0f, 1f, Time.deltaTime * rotationSpeed);  // Use SmoothStep for a smoother transition
-        float newYRotation = Mathf.LerpAngle(currentYRotation, targetRotation, rotationStep);
-
-        transform.rotation = Quaternion.Euler(0, newYRotation, 0);
 
 
         // Jumping
