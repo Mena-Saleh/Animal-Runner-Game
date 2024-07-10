@@ -26,9 +26,6 @@ public class CharController : MonoBehaviour
     private GameObject lastTriggeredSpawn = null; // To not trigger same roadspawners twice in a row
     private bool canMove = true; // Variable to control ability to move to be triggered on death
     private AudioManager audioManager;
-    private float runningSoundCooldown = 0.4f; // Minimum time between running sounds (to not spam it on every update)
-    private float lastRunningSoundTime = 0; // When the last running sound was played
-
 
     // Use this for initialization
     void Start()
@@ -61,14 +58,6 @@ public class CharController : MonoBehaviour
         bool isRunning = Mathf.Abs(hMovement) > 0 || Mathf.Abs(vMovement) > 0;
         animator.SetBool("isRunning", isRunning); // Update the animator parameter
 
-
-        // Check if cooldown for playing running sound is over while player is running
-        if (isRunning && Time.time - lastRunningSoundTime >= runningSoundCooldown)
-        {
-            // Play sound effect
-            audioManager.PlaySFX(audioManager.running);
-            lastRunningSoundTime = Time.time; // Update the last time the sound was played
-        }
 
         //Prevent backward movement
         if (vMovement < 0)

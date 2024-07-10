@@ -4835,7 +4835,6 @@ MonoBehaviour:
   SFXSource: {fileID: 1111822093}
   background: {fileID: 8300000, guid: 6e92608302cbdc146ad585035fd5babc, type: 3}
   collision: {fileID: 8300000, guid: a24ba5285ebdd6d44b7bc80ad8011de5, type: 3}
-  running: {fileID: 8300000, guid: d9c190b5cdb36a54392f1168859b6498, type: 3}
   jumping: {fileID: 8300000, guid: 4b6ab46f6ce00464b868258549147437, type: 3}
   coinCollect: {fileID: 8300000, guid: cde405a5eb9d65a45ae9abd09ebd7ce5, type: 3}
 --- !u!4 &250389382
