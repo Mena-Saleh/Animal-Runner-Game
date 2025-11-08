@@ -2,7 +2,11 @@
 
 A simple 3D endless runner game created using unity.
 
-# In-Game Screenshots
+# Download the game
+
+You can download the game for Windows OS from [here](https://drive.google.com/drive/folders/1Q3lEu1wcGNrr5npLvsRekuLEic2Y-8XY?fbclid=IwAR1nnGSzJz-WdyuOnhuAelTNGehr83nCKBFYhrVHAKqy2cK6Y_MNMiRhwsU)
+
+# In-Game Snippets
 
 Main Menu:
 
@@ -10,4 +14,4 @@ Main Menu:
 
 What the game looks like:
 
-![First stage](Screenshots/1.png)
+![Demo](Screenshots/Demo.gif)
